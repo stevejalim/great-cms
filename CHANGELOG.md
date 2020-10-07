@@ -8,6 +8,7 @@
 - no ticket - Dependencies upgrade
 
 ### Fixed bugs
+- GP2-589 - Fix personalization bar in export plan dashboard page
 - GP2-596 - Force logout even if token revoke fails
 - GP2-623 - Further update to next lesson feature
 - GP2-76 - adjust aligment of back button

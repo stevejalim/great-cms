@@ -7,12 +7,13 @@ from exportplan import data
 class ExportPlanDashboardPage(
     mixins.WagtailAdminExclusivePageMixin,
     mixins.EnableTourMixin,
+    mixins.ExportPlanMixin,
     Page,
 ):
 
     template = 'exportplan/dashboard_page.html'
 
     def get_context(self, request):
-        return {
-            'sections': list(data.SECTIONS.values()),
-        }
+        context = super().get_context(request)
+        context['sections'] = list(data.SECTIONS.values())
+        return context
