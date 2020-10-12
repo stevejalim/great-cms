@@ -2,12 +2,11 @@ from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 from wagtailmedia.blocks import AbstractMediaChooserBlock
 
-from core import models
 from django.core.exceptions import ObjectDoesNotExist
+from core import models
+from core.constants import RICHTEXT_FEATURES__MINIMAL
 
-
-# Define a strict subset of rich-text features only includes linebreaks
-RICHTEXT_FEATURES__MINIMAL = ()
+from core.utils import get_personalised_case_study_orm_filter_args, get_personalised_choices
 
 
 class MediaChooserBlock(AbstractMediaChooserBlock):
@@ -224,3 +223,46 @@ class ChooseDoNotChooseBlock(blocks.StructBlock):
         )
         icon = 'fa-question-circle'
         template = 'learn/choose_do_not_choose.html'
+
+
+class CaseStudyStaticBlock(blocks.StaticBlock):
+
+    class Meta:
+        admin_text = (
+            'Case Studies are automatically displayed based on '
+            'personalisation rules; no configuration needed beyond '
+            'adding this block to the page.'
+        )
+        icon = 'fa-book'
+        template = 'core/case_study_block.html'
+
+    def _annotate_with_case_study(self, context):
+        """Add the relevant case study, if any, to the context."""
+
+        # no export_plan no case_study to display
+        if 'export_plan' not in context.keys():
+            return context
+
+        hs_code, country, region = get_personalised_choices(context['export_plan'])
+
+        filter_args = get_personalised_case_study_orm_filter_args(
+            hs_code=hs_code,
+            country=country,
+            region=region
+        )
+        queryset = models.CaseStudy.objects.all()
+        for filter_arg in filter_args:
+            case_study = queryset.filter(**filter_arg)
+            if case_study.exists():
+                context['case_study'] = case_study.distinct().latest()
+                break
+
+        return context
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(
+            value,
+            parent_context=parent_context
+        )
+        context = self._annotate_with_case_study(context)
+        return context

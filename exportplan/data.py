@@ -21,7 +21,6 @@ if settings.FEATURE_EXPORT_PLAN_SECTIONS_DISABLED:
     SECTIONS_DISABLED = [
         TARGET_MARKETS_RESEARCH,
         ADAPTATION_TARGET_MARKET,
-        MARKETING_APPROACH,
         COSTS_AND_PRICING,
         FINANCE,
         PAYMENT_METHODS,
@@ -30,6 +29,17 @@ if settings.FEATURE_EXPORT_PLAN_SECTIONS_DISABLED:
     ]
 else:
     SECTIONS_DISABLED = []
+
+# This maintains a collection of which pages require a country to be selected
+COUNTRY_REQUIRED = [
+    slugify(TARGET_MARKETS_RESEARCH),
+    slugify(ADAPTATION_TARGET_MARKET),
+    slugify(MARKETING_APPROACH),
+    slugify(COSTS_AND_PRICING),
+    slugify(FINANCE),
+    slugify(PAYMENT_METHODS),
+    slugify(TRAVEL_AND_BUSINESS_POLICIES),
+]
 
 SECTIONS = OrderedDict({
     slugify(ABOUT_YOUR_BUSINESS): {
