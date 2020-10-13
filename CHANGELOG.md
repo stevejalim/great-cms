@@ -8,6 +8,7 @@
 - no ticket - Dependencies upgrade
 
 ### Fixed bugs
+- GP2-669 - Country Finder - Various defect fixes
 - GP2-596 - Force logout even if token revoke fails
 - GP2-623 - Further update to next lesson feature
 - GP2-76 - adjust aligment of back button
@@ -59,6 +60,11 @@
 - GP2-315 - route to market backend integration
 
 ### Implemented enhancements
+- GP2-299 - Step by step reduce image size
+- GP2-754 - Pros and Cons updated design
+- GP2-261 - Additional lesson video/image block
+- GP2-707 - Capability design review
+- GP2-684 - Product-search value interaction
 - GP2-669 - CountryFinder added collapsibility for region section
 - GP2-703 - Add new DSM Cards
 - GP2-686 - Product-search End result details
@@ -70,6 +76,7 @@
 - GP2-680 - Restyle product search modal
 - GP2-602 - Use new header on all pages and allow login/logout
 - GP2-331 - Rerouting to login page with error message
+- GP2-688 - GTM tags in product search modal
 - GP2-413 -  style learn linking component
 - GP2-597 - Name convention
 - GP2-600 - Header menu interraction
@@ -256,7 +263,11 @@
 - noticket add-learning-to-objectives
 - GP2-513 - Dropdown-changes
 - noticket bug fix lessons details on objectives
-- GP2-706 - 
+- GP2-706 -
 - ablity-to-disable-export-sections
 - GP2-655 - local development support/skeleton for Wagtail Transfer work
 - GP2-667 - appropriately scoped configuration for Wagtail Transfer when deployed
+- GP2-656 - Make transcript field mandatory for GreatMedia
+- GP2-709 - BE Country add required country signal
+- GP2-744 and GP2-744 - tighten up validation for CaseStudy.body StreamField
+- noticket - hide-next-link
