@@ -86,6 +86,10 @@ def get_wagtail_transfer_configuration() -> dict:
                     'BASE_URL': 'http://greatcms.trade.great:8030/admin/wagtail-transfer/',
                     'SECRET_KEY': 'local-two',
                 },
+                'local_bau_on_8010': {
+                    'BASE_URL': 'http://domestic.trade.great:8010/admin/wagtail-transfer/',
+                    'SECRET_KEY': 'debug',
+                },
             }
         )
 

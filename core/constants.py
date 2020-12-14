@@ -1,3 +1,5 @@
+from directory_constants import cms
+
 SERVICE_NAME = 'great-cms'
 
 VIDEO_DURATION_DATA_ATTR_NAME = 'data-v-duration'
@@ -16,4 +18,19 @@ AWS_S3_MAIN_HOSTNAME_OPTIONS = [
     # 'account-id.s3-control.dualstack.eu-west-2.amazonaws.com',   # inviable for us
     's3-accesspoint.eu-west-2.amazonaws.com',
     's3-accesspoint.dualstack.eu-west-2.amazonaws.com',
+]
+
+
+APP_URLS = {
+    #  MANUALLY FIXED FOR NOW
+    cms.EXPORT_READINESS: "https://exopps.example.com/",
+    cms.COMPONENTS: "https://components.example.com/",
+    cms.GREAT_INTERNATIONAL: "/international/",
+}
+
+ARTICLE_TYPES = [
+    ('Blog', 'Blog'),
+    ('Advice', 'Advice'),
+    ('Case study', 'Case study'),
+    ('Campaign', 'Campaign'),
 ]

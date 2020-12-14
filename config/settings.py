@@ -27,10 +27,14 @@ APPEND_SLASH = True
 # Application definition
 
 INSTALLED_APPS = [
+    'wagtail_modeltranslation',
+    'wagtail_modeltranslation.makemigrations',
+    'wagtail_modeltranslation.migrate',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
     'wagtail.embeds',
+    'wagtail.contrib.settings',
     'wagtail.sites',
     'wagtail.users',
     'wagtail.snippets',
@@ -66,6 +70,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'learn.apps.LearnConfig',
     'captcha',
+    'export_readiness',  # domestic
+    'great_international',  # international, natch
 ]
 
 MIDDLEWARE = [
@@ -83,6 +89,7 @@ MIDDLEWARE = [
     'core.middleware.UserSpecificRedirectMiddleware',
     'core.middleware.UserLocationStoreMiddleware',
     'core.middleware.StoreUserExpertiseMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'wagtailcache.cache.FetchFromCacheMiddleware',
     'core.middleware.CheckGATags',
 ]
@@ -160,6 +167,28 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Translation
+MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField',)
+MODELTRANSLATION_FALLBACK_LANGUAGES = ()
+WAGTAILMODELTRANSLATION_TRANSLATE_SLUGS = False
+
+
+# https://github.com/django/django/blob/master/django/conf/locale/__init__.py
+LANGUAGES_DETAILS = (
+    ('en-gb', 'English', 'English'),
+    ('de', 'German', 'Deutsch'),
+    ('ja', 'Japanese', '日本語'),
+    ('zh-hans', 'Simplified Chinese', '简体中文'),
+    ('fr', 'French', 'Français'),
+    ('es', 'Spanish', 'español'),
+    ('pt', 'Portuguese', 'Português'),
+    ('ar', 'Arabic', 'العربيّة'),
+)
+LANGUAGES = [(code, label) for code, label, _ in LANGUAGES_DETAILS]
+LANGUAGES_LOCALIZED = [(code, label) for code, _, label in LANGUAGES_DETAILS]
+
+LANGUAGE_COOKIE_NAME = 'cms_language'  # avoid clashing with the UI language cookie
 
 
 # Static files (CSS, JavaScript, Images)
@@ -379,7 +408,7 @@ GA360_BUSINESS_UNIT = 'GreatMagna'
 
 REST_FRAMEWORK = {'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',)}
 
-WAGTAILIMAGES_IMAGE_MODEL = 'core.AltTextImage'
+# WAGTAILIMAGES_IMAGE_MODEL = 'core.AltTextImage'
 WAGTAILMEDIA_MEDIA_MODEL = 'core.GreatMedia'
 
 # Google captcha
@@ -472,6 +501,8 @@ WAGTAILTRANSFER_UPDATE_RELATED_MODELS = [
 
 # Give W-T a little more time than the default 5 secs to do things
 WAGTAILTRANSFER_CHOOSER_API_PROXY_TIMEOUT = env.int('WAGTAILTRANSFER_CHOOSER_API_PROXY_TIMEOUT', 10)
+
+WAGTAILTRANSFER_NO_FOLLOW_MODELS = ['wagtailcore.page', 'auth.User']
 
 WAGTAILTRANSFER_FOLLOWED_REVERSE_RELATIONS = [
     # (model, reverse_relationship_name, track_deletions)
