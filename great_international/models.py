@@ -10,13 +10,13 @@ from . import panels
 
 
 class BaseInternationalPage(BasePage):
-    service_name_value = 'GREAT_INTERNATIONAL'
+    # service_name_value = 'GREAT_INTERNATIONAL'
 
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs):
-        self.uses_tree_based_routing = True
+        # self.uses_tree_based_routing = True
         return super().save(*args, **kwargs)
 
 
@@ -171,6 +171,8 @@ class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, Base
 class InternationalSectorPage(BaseInternationalSectorPage):
     class Meta:
         ordering = ['-heading']
+
+    template = "international_sector_page.html"
 
     parent_page_types = [
         'core.LandingPage',

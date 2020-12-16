@@ -1,0 +1,50 @@
+{% extends 'directory_components/base.html' %}
+
+{% load static from staticfiles %}
+{% load i18n %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+{% get_current_language as LANGUAGE %}
+
+{% block head_title %}{{ international_home_link.label }}{% endblock %}
+
+{% load static_absolute international_header from directory_components %}
+
+{% block head_css %}
+  {{ block.super }}
+  <link href="{% static 'directory_components/vendor/flag-icons/css/flag-icon.min.css' %}" media="all" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'core/styles/main.css' %}">
+{% endblock %}
+
+{% block header_js %}
+  <script src="{% static 'directory_components/js/dit.responsive.js' %}"></script>
+  <script src="{% static 'directory_components/js/dit.utils.js' %}"></script>
+  <script src="{% static 'directory_components/js/dit.components.countrySelector.js' %}"></script>
+  <script src="{% static 'directory_components/js/dit.components.languageSelectorDropdown.js' %}"></script>
+  <script src="{% static 'directory_components/js/dit.components.header.js' %}"></script>
+  <script src="{% static 'directory_components/js/dit.components.greatInternationalHeader.js' %}"></script>
+{% endblock %}
+
+{% block head_other %}{% endblock %}
+
+{% block head_sharing_metadata %}
+    {% if request %}
+        <meta property="og:image" content="{% block meta_sharing_thumbnail %}{% static_absolute 'directory_components/images/opengraph-image.png' %}{% endblock %}">
+        <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    {% endif %}
+{% endblock %}
+
+{% block body_header %}
+  {% international_header navigation_tree=navigation_tree site_section=header_section site_sub_section=header_sub_section %}
+{% endblock %}
+
+{% block feedback_reporter %}
+<section dir="ltr" class="error-reporting">
+  <div class="container">
+    <a id="error-reporting-section-contact-us" href="{{ services_urls.feedback }}" target="_blank">{% trans 'Is there anything wrong on this page?' %}</a>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_footer %}
+  {% include 'directory_components/header_footer/international_footer.html' %}
+{% endblock %}

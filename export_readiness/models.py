@@ -85,15 +85,15 @@ class BasePage(Page):
     class Meta:
         abstract = True
 
-    # URL fixes for legacy pages:
-    # overrides the url path before the page slug is appended
-    view_path = ''
-    # overrides the entire url path including any custom slug the page has
-    full_path_override = ''
-    # if True when generating the url this page's slug will be ignored
-    folder_page = False
-    # overrides page.slug when generating the url
-    slug_override = None
+    # # URL fixes for legacy pages:
+    # # overrides the url path before the page slug is appended
+    # view_path = ''
+    # # overrides the entire url path including any custom slug the page has
+    # full_path_override = ''
+    # # if True when generating the url this page's slug will be ignored
+    # folder_page = False
+    # # overrides page.slug when generating the url
+    # slug_override = None
 
     subpage_types = []
     content_panels = []
@@ -124,164 +124,167 @@ class BasePage(Page):
 
     @transaction.atomic
     def save(self, *args, **kwargs):
-        self.service_name = self.service_name_value
+        # self.service_name = self.service_name_value
         return super().save(*args, **kwargs)
 
-    def get_draft_token(self):
-        return self.signer.sign(self.pk)
+    # def get_draft_token(self):
+    #     return self.signer.sign(self.pk)
 
-    def is_draft_token_valid(self, draft_token):
-        try:
-            value = self.signer.unsign(draft_token)
-        except signing.BadSignature:
-            return False
-        else:
-            return str(self.pk) == str(value)
+    # def is_draft_token_valid(self, draft_token):
+    #     try:
+    #         value = self.signer.unsign(draft_token)
+    #     except signing.BadSignature:
+    #         return False
+    #     else:
+    #         return str(self.pk) == str(value)
 
-    def get_non_prefixed_url(self, site=None):
-        """
-        Returns the page's url_path value with the url_path of the
-        site's root page removed from the start, and starting with
-        a forward slash. e.g. "/international/some-some-page".
-        Used by get_tree_based_url() and for generating `old_path`
-        values when creating redirects for this page
-        """
-        site = site or self.get_site()
-        return self.url_path[len(site.root_page.url_path) :]  # noqa: E203
+    # def get_non_prefixed_url(self, site=None):
+    #     """
+    #     Returns the page's url_path value with the url_path of the
+    #     site's root page removed from the start, and starting with
+    #     a forward slash. e.g. "/international/some-some-page".
+    #     Used by get_tree_based_url() and for generating `old_path`
+    #     values when creating redirects for this page
+    #     """
+    #     site = site or self.get_site()
+    #     return self.url_path[len(site.root_page.url_path) :]  # noqa: E203
 
-    def get_site(self):
-        """
-        Overrides Page.get_site() in order to fetch ``RoutingSettings``
-        in the same query (for tree-based-routing). Will also create a
-        ``RoutingSettings`` for the site if they haven't been created yet.
-        """
-        url_parts = self.get_url_parts()
+    # def get_site(self):
+    #     """
+    #     Overrides Page.get_site() in order to fetch ``RoutingSettings``
+    #     in the same query (for tree-based-routing). Will also create a
+    #     ``RoutingSettings`` for the site if they haven't been created yet.
+    #     """
+    #     url_parts = self.get_url_parts()
 
-        if url_parts is None:
-            # page is not routable
-            return
+    #     if url_parts is None:
+    #         # page is not routable
+    #         return
 
-        site_id, root_url, page_path = url_parts
+    #     site_id, root_url, page_path = url_parts
 
-        site = Site.objects.select_related('routingsettings').get(id=site_id)
+    #     site = Site.objects.select_related('routingsettings').get(id=site_id)
 
-        # Ensure the site has routingsettings before returning
-        try:
-            # if select_related() above was successful, great!
-            site.routingsettings
-        except RoutingSettings.DoesNotExist:
-            # RoutingSettings need creating
-            site.routingsettings = RoutingSettings.objects.create(site=site)
-        return site
+    #     # Ensure the site has routingsettings before returning
+    #     try:
+    #         # if select_related() above was successful, great!
+    #         site.routingsettings
+    #     except RoutingSettings.DoesNotExist:
+    #         # RoutingSettings need creating
+    #         site.routingsettings = RoutingSettings.objects.create(site=site)
+    #     return site
 
-    def get_tree_based_url(self, include_site_url=False):
-        """
-        Returns the URL for this page based on it's position in the tree,
-        and the RoutingSettings options for the `Site` the page belongs to.
-        Wagtail multisite must be set up in order for this to work.
-        """
-        site = self.get_site()
-        routing_settings = site.routingsettings
-        page_path = self.get_non_prefixed_url(site)
+    # def get_tree_based_url(self, include_site_url=False):
+    #     """
+    #     Returns the URL for this page based on it's position in the tree,
+    #     and the RoutingSettings options for the `Site` the page belongs to.
+    #     Wagtail multisite must be set up in order for this to work.
+    #     """
+    #     site = self.get_site()
+    #     routing_settings = site.routingsettings
+    #     page_path = self.get_non_prefixed_url(site)
 
-        # prefix path with prefix from routing settings
-        prefix = routing_settings.root_path_prefix.rstrip('/')
-        if prefix:
-            page_path = prefix + '/' + page_path
+    #     # prefix path with prefix from routing settings
+    #     prefix = routing_settings.root_path_prefix.rstrip('/')
+    #     if prefix:
+    #         page_path = prefix + '/' + page_path
 
-        if include_site_url:
-            if not routing_settings.include_port_in_urls:
-                # prevent the port being included in site.root_url
-                site.port = 80
-            return urljoin(site.root_url, page_path)
+    #     if include_site_url:
+    #         if not routing_settings.include_port_in_urls:
+    #             # prevent the port being included in site.root_url
+    #             site.port = 80
+    #         return urljoin(site.root_url, page_path)
 
-        return page_path
+    #     return page_path
 
-    def get_url_path_parts(self):
-        return [self.view_path, self.slug + '/']
+    # def get_url_path_parts(self):
+    #     return [self.view_path, self.slug + '/']
 
-    def get_url(self, is_draft=False, language_code=settings.LANGUAGE_CODE):
-        url = self.full_url
-        querystring = {}
-        if is_draft:
-            querystring['draft_token'] = self.get_draft_token()
-        if language_code != settings.LANGUAGE_CODE:
-            querystring['lang'] = language_code
-        if querystring:
-            url += '?' + urlencode(querystring)
-        return url
+    # def get_url(self, is_draft=False, language_code=settings.LANGUAGE_CODE):
+    #     url = self.full_url
+    #     querystring = {}
+    #     if is_draft:
+    #         querystring['draft_token'] = self.get_draft_token()
+    #     if language_code != settings.LANGUAGE_CODE:
+    #         querystring['lang'] = language_code
+    #     if querystring:
+    #         url += '?' + urlencode(querystring)
+    #     return url
 
-    @property
-    def ancestors_in_app(self):
-        """
-        Used by `full_path` and `get_tree_based_breadcrumbs`
-        in BasePageSerializer.
-        Starts at 2 to exclude the root page and the app page.
-        Ignores 'folder' pages.
-        """
-        ancestors = self.get_ancestors()[2:]
+    # @property
+    # def ancestors_in_app(self):
+    #     """
+    #     Used by `full_path` and `get_tree_based_breadcrumbs`
+    #     in BasePageSerializer.
+    #     Starts at 2 to exclude the root page and the app page.
+    #     Ignores 'folder' pages.
+    #     """
+    #     ancestors = self.get_ancestors()[2:]
 
-        return [page for page in ancestors if not page.specific_class.folder_page]
+    #     return [page for page in ancestors if not page.specific_class.folder_page]
 
-    @property
-    def full_path(self):
-        """Return the full path of a page, ignoring the root_page and
-        the app page.
-        """
-        if self.uses_tree_based_routing:
-            return self.get_tree_based_url(include_site_url=False)
+    # @property
+    # def full_path(self):
+    #     """Return the full path of a page, ignoring the root_page and
+    #     the app page.
+    #     """
+    #     if self.uses_tree_based_routing:
+    #         return self.get_tree_based_url(include_site_url=False)
 
-        # continue with existing behaviour
-        if self.full_path_override:
-            return self.full_path_override
+    #     # continue with existing behaviour
+    #     if self.full_path_override:
+    #         return self.full_path_override
 
-        path_components = []
+    #     path_components = []
 
-        if not self.view_path:
-            path_components = [page.specific_class.slug_override or page.slug for page in self.ancestors_in_app]
+    #     if not self.view_path:
+    #         path_components = [page.specific_class.slug_override or page.slug for page in self.ancestors_in_app]
 
-        # need to also take into account the view_path if it's set
-        else:
-            path_components.insert(0, self.view_path.strip('/'))
+    #     # need to also take into account the view_path if it's set
+    #     else:
+    #         path_components.insert(0, self.view_path.strip('/'))
 
-        path_components.append(self.slug_override if self.slug_override is not None else self.slug)
+    #     path_components.append(self.slug_override if self.slug_override is not None else self.slug)
 
-        return '/{path}/'.format(path='/'.join(path_components))
+    #     return '/{path}/'.format(path='/'.join(path_components))
 
-    @property
-    def full_url(self):
-        if self.uses_tree_based_routing:
-            return self.get_tree_based_url(include_site_url=True)
+    # @property
+    # def full_url(self):
+    #     if self.uses_tree_based_routing:
+    #         return self.get_tree_based_url(include_site_url=True)
 
-        # continue with existing behaviour
-        domain = dict(constants.APP_URLS)[self.service_name_value]
-        return helpers.get_page_full_url(domain, self.full_path)
+    #     # continue with existing behaviour
+    #     domain = dict(constants.APP_URLS)[self.service_name_value]
+    #     return helpers.get_page_full_url(domain, self.full_path)
 
-    @property
-    def url(self):
-        return self.get_url()
+    # @property
+    # def url(self):
+    #     return self.get_url()
 
-    def get_localized_urls(self):
-        # localized urls are used to tell google of alternative urls for
-        # available languages, so there should be no need to expose the draft
-        # url
-        return [
-            (language_code, self.get_url(language_code=language_code)) for language_code in self.translated_languages
-        ]
+    # def get_localized_urls(self):
+    #     # localized urls are used to tell google of alternative urls for
+    #     # available languages, so there should be no need to expose the draft
+    #     # url
+    #     return [
+    #         (language_code, self.get_url(language_code=language_code)) for language_code in self.translated_languages
+    #     ]
 
-    def serve(self, request, *args, **kwargs):
-        return redirect(self.get_url())
+    # def serve(self, request, *args, **kwargs):
+    #     import ipdb
 
-    def get_latest_nested_revision_as_page(self):
-        revision = self.get_latest_revision_as_page()
-        foreign_key_names = [
-            field.name for field in revision._meta.get_fields() if isinstance(field, models.ForeignKey)
-        ]
-        for name in foreign_key_names:
-            field = getattr(revision, name)
-            if hasattr(field, 'get_latest_revision_as_page'):
-                setattr(revision, name, field.get_latest_revision_as_page())
-        return revision
+    #     ipdb.set_trace()
+    #     return redirect(self.get_url())
+
+    # def get_latest_nested_revision_as_page(self):
+    #     revision = self.get_latest_revision_as_page()
+    #     foreign_key_names = [
+    #         field.name for field in revision._meta.get_fields() if isinstance(field, models.ForeignKey)
+    #     ]
+    #     for name in foreign_key_names:
+    #         field = getattr(revision, name)
+    #         if hasattr(field, 'get_latest_revision_as_page'):
+    #             setattr(revision, name, field.get_latest_revision_as_page())
+    #     return revision
 
     @classmethod
     def get_translatable_fields(cls):
@@ -359,27 +362,28 @@ class MarkdownField(TextField):
 
 
 class ServiceNameUniqueSlugMixin:
-    @staticmethod
-    def _slug_is_available(slug, parent, page=None):
-        from export_readiness import filters  # circular dependencies
+    pass
+    # @staticmethod
+    # def _slug_is_available(slug, parent, page=None):
+    #     from export_readiness import filters  # circular dependencies
 
-        queryset = filters.ServiceNameFilter().filter_service_name(
-            queryset=Page.objects.filter(slug=slug).exclude(pk=page.pk),
-            name=None,
-            value=page.service_name,
-        )
-        return not queryset.exists()
+    #     queryset = filters.ServiceNameFilter().filter_service_name(
+    #         queryset=Page.objects.filter(slug=slug).exclude(pk=page.pk),
+    #         name=None,
+    #         value=page.service_name,
+    #     )
+    #     return not queryset.exists()
 
-    @transaction.atomic
-    def save(self, *args, **kwargs):
-        self.service_name = self.service_name_value
-        if not self._slug_is_available(slug=self.slug, parent=self.get_parent(), page=self):
-            raise ValidationError({'slug': 'This slug is already in use'})
-        return super().save(*args, **kwargs)
+    # @transaction.atomic
+    # def save(self, *args, **kwargs):
+    #     self.service_name = self.service_name_value
+    #     if not self._slug_is_available(slug=self.slug, parent=self.get_parent(), page=self):
+    #         raise ValidationError({'slug': 'This slug is already in use'})
+    #     return super().save(*args, **kwargs)
 
 
 class BaseDomesticPage(ServiceNameUniqueSlugMixin, BasePage):
-    service_name_value = cms.EXPORT_READINESS
+    # service_name_value = cms.EXPORT_READINESS
 
     class Meta:
         abstract = True
@@ -390,6 +394,8 @@ class CountryGuidePage(panels.CountryGuidePagePanels, BaseDomesticPage):
 
     class Meta:
         ordering = ['-heading']
+
+    template = "country_guide_page.html"
 
     parent_page_types = [
         'core.LandingPage',
@@ -1023,6 +1029,31 @@ class CountryGuidePage(panels.CountryGuidePagePanels, BaseDomesticPage):
 
     tags = ParentalManyToManyField(snippets.IndustryTag, blank=True)
     country = models.ForeignKey(snippets.Country, null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+
+    def count_data_with_field(self, list_of_data, field):
+        filtered_list = [item for item in list_of_data if item[field]]
+        return len(filtered_list)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        self.num_of_statistics = self.count_data_with_field(context['page']['statistics'], 'number')
+        fact_sheet = context['page']['fact_sheet']
+        fact_sheet['num_of_columns'] = self.count_data_with_field(fact_sheet['columns'], 'title')
+        for accordion in context['page']['accordions']:
+            case_study = accordion['case_study']
+            case_study['is_viable'] = case_study['title'] and case_study['image']
+
+            accordion['num_of_subsections'] = self.count_data_with_field(accordion['subsections'], 'heading')
+
+            accordion['num_of_statistics'] = self.count_data_with_field(accordion['statistics'], 'number')
+
+            accordion['neither_case_study_nor_statistics'] = (
+                not case_study['is_viable'] and not accordion['num_of_statistics']
+            )
+
+            accordion['is_viable'] = accordion['title'] and accordion['teaser'] and accordion['num_of_subsections'] >= 2
+
+        return context
 
 
 class ArticlePage(panels.ArticlePagePanels, BaseDomesticPage):
