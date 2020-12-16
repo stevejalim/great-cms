@@ -1,0 +1,175 @@
+
+// UTILITY CLASSES
+// ================
+
+@import 'mixins';
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-section{
+  @include page-section-padding;
+}
+
+.white-page-section {
+  @include white-section;
+}
+
+.stone-page-section {
+  @include stone-section;
+}
+
+.top-page-section {
+  @include top-page-section-padding;
+}
+
+
+.background-stone-gradient-bottom {
+  background-image: linear-gradient(to bottom, $white 10%, $stone-30 10%);
+}
+
+.with-left-arrow {
+  @include with-left-arrow;
+}
+
+.close-button {
+  @include button-reset;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+  font-size: 0;
+  width: 20px;
+  height: 20px;
+
+  &:focus,
+  &:focus:active {
+    @include focus;
+  }
+
+  &:focus:active {
+    background: $focus-yellow;
+  }
+
+  &:before {
+    @include up-chevron-1($mid-blue);
+    margin: 0;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    left: 4px;
+    top: 10px;
+  }
+
+  &:after {
+    @include down-chevron-1($mid-blue);
+    margin: 0;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    left: 4px;
+    top: -4px;
+  }
+
+  &:hover {
+    &:before,
+    &:after {
+      border-color: $light-blue;
+    }
+  }
+}
+
+.margin-top-remove-30{
+  margin-top: -30px;
+}
+
+.center-vertical{
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.max-width-100 {
+  max-width: 100%;
+}
+
+@media (min-width: 641px) {
+  section .container {
+    .left-half-page-text {
+      padding-right: $spacing-1;
+    }
+
+    .right-half-page-text {
+      padding-left: $spacing-1;
+    }
+  }
+}
+
+
+@media (min-width: 961px) {
+  section .container {
+    .left-half-page-text-xl {
+      padding-right: $spacing-1;
+    }
+
+    .right-half-page-text-xl {
+      padding-left: $spacing-1;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  section .container {
+    .left-half-page-text-l {
+      padding-right: $spacing-1;
+    }
+
+    .right-half-page-text-l {
+      padding-left: $spacing-1;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .reverse-columns-s {
+    flex-direction: column-reverse;
+  }
+}
+
+
+@media (max-width: 960px) {
+  .reverse-columns-l {
+    flex-direction: column-reverse;
+  }
+}
+
+
+.icon {
+  height: auto;
+  width: 60px;
+}
+
+@media (min-width: 961px) {
+  .float-right-xl {
+    float: right;
+  }
+}
+
+.map-labels {
+
+  .region-title {
+    display: inline-flex;
+    color: $active-blue;
+  }
+
+  .region-link{
+    text-decoration-color: $active-blue;
+  }
+
+}
