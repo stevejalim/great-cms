@@ -1,4 +1,3 @@
-import copy
 from django.forms import CheckboxSelectMultiple, Textarea, Select
 from wagtailmedia.widgets import AdminMediaChooser
 from wagtail.admin.edit_handlers import (
@@ -7,55 +6,11 @@ from wagtail.admin.edit_handlers import (
     FieldRowPanel,
     MultiFieldPanel,
     PageChooserPanel,
-    ObjectList,
     TabbedInterface,
 )
 from wagtail.images.edit_handlers import ImageChooserPanel
 
-from export_readiness.panels import SearchEngineOptimisationPanel
-from django.conf import settings
-from modeltranslation.utils import build_localized_fieldname
-
-
-def translate_panel(panel, language_code):
-    """Convert an English admin editor field ("panel") to e.g, French.
-
-    That is achieved by cloning the English panel and then changing the
-    field_name property of the clone.
-
-    Some panels are not fields, but really are fieldsets (which have no name)
-    so we just clone then without trying to set the name.
-
-    Some panels have child panels, so those child panels are translated too.
-
-    Arguments:
-        panel {Panel} -- English panel to convert
-        language_code {str} -- Target conversion language
-
-    Returns:
-        Panel -- Translated panel
-
-    """
-
-    panel = copy.deepcopy(panel)
-    if hasattr(panel, 'field_name'):
-        panel.field_name = build_localized_fieldname(field_name=panel.field_name, lang=language_code)
-    if hasattr(panel, 'relation_name'):
-        panel.relation_name = build_localized_fieldname(field_name=panel.relation_name, lang=language_code)
-    if hasattr(panel, 'children'):
-        panel.children = [translate_panel(child, language_code) for child in panel.children]
-    return panel
-
-
-def make_translated_interface(content_panels, settings_panels=None, other_panels=None):
-    panels = []
-    for code, name in settings.LANGUAGES:
-        panels.append(ObjectList([translate_panel(panel, code) for panel in content_panels], heading=name))
-    if settings_panels:
-        panels.append(ObjectList(settings_panels, classname='settings', heading='Settings'))
-    if other_panels:
-        panels += other_panels
-    return TabbedInterface(panels)
+from domestic.panels import SearchEngineOptimisationPanel
 
 
 class BaseInternationalSectorPagePanels:
@@ -190,8 +145,8 @@ class BaseInternationalSectorPagePanels:
                 PageChooserPanel(
                     'case_study_cta_page',
                     [
-                        'great_international.InternationalArticlePage',
-                        'great_international.InternationalCampaignPage',
+                        'international.InternationalArticlePage',
+                        'international.InternationalCampaignPage',
                     ],
                 ),
                 ImageChooserPanel('case_study_image'),
@@ -241,22 +196,22 @@ class BaseInternationalSectorPagePanels:
                         PageChooserPanel(
                             'related_page_one',
                             [
-                                'great_international.InternationalArticlePage',
-                                'great_international.InternationalCampaignPage',
+                                'international.InternationalArticlePage',
+                                'international.InternationalCampaignPage',
                             ],
                         ),
                         PageChooserPanel(
                             'related_page_two',
                             [
-                                'great_international.InternationalArticlePage',
-                                'great_international.InternationalCampaignPage',
+                                'international.InternationalArticlePage',
+                                'international.InternationalCampaignPage',
                             ],
                         ),
                         PageChooserPanel(
                             'related_page_three',
                             [
-                                'great_international.InternationalArticlePage',
-                                'great_international.InternationalCampaignPage',
+                                'international.InternationalArticlePage',
+                                'international.InternationalCampaignPage',
                             ],
                         ),
                     ]
@@ -277,8 +232,6 @@ class BaseInternationalSectorPagePanels:
     ]
 
     settings_panels = [FieldPanel('slug'), FieldPanel('tags', widget=CheckboxSelectMultiple)]
-
-    edit_handler = make_translated_interface(content_panels=content_panels, settings_panels=settings_panels)
 
 
 class InternationalArticlePagePanels:
@@ -304,9 +257,9 @@ class InternationalArticlePagePanels:
             children=[
                 FieldRowPanel(
                     [
-                        PageChooserPanel('related_page_one', 'great_international.InternationalArticlePage'),
-                        PageChooserPanel('related_page_two', 'great_international.InternationalArticlePage'),
-                        PageChooserPanel('related_page_three', 'great_international.InternationalArticlePage'),
+                        PageChooserPanel('related_page_one', 'international.InternationalArticlePage'),
+                        PageChooserPanel('related_page_two', 'international.InternationalArticlePage'),
+                        PageChooserPanel('related_page_three', 'international.InternationalArticlePage'),
                     ]
                 ),
             ],
@@ -324,12 +277,6 @@ class InternationalArticlePagePanels:
         FieldPanel('slug'),
         FieldPanel('tags', widget=CheckboxSelectMultiple),
     ]
-
-    edit_handler = make_translated_interface(
-        content_panels=content_panels,
-        settings_panels=settings_panels,
-        other_panels=[ObjectList(image_panels, heading='Images')],
-    )
 
 
 class InternationalCampaignPagePanels:
@@ -405,9 +352,9 @@ class InternationalCampaignPagePanels:
                 FieldPanel('related_content_intro'),
                 FieldRowPanel(
                     [
-                        PageChooserPanel('related_page_one', 'great_international.InternationalArticlePage'),
-                        PageChooserPanel('related_page_two', 'great_international.InternationalArticlePage'),
-                        PageChooserPanel('related_page_three', 'great_international.InternationalArticlePage'),
+                        PageChooserPanel('related_page_one', 'international.InternationalArticlePage'),
+                        PageChooserPanel('related_page_two', 'international.InternationalArticlePage'),
+                        PageChooserPanel('related_page_three', 'international.InternationalArticlePage'),
                     ]
                 ),
             ],
@@ -432,5 +379,3 @@ class InternationalCampaignPagePanels:
     ]
 
     settings_panels = [FieldPanel('slug'), FieldPanel('tags', widget=CheckboxSelectMultiple)]
-
-    edit_handler = make_translated_interface(content_panels=content_panels, settings_panels=settings_panels)

@@ -3,39 +3,29 @@ from django.db import models
 from modelcluster.fields import ParentalManyToManyField
 
 from core.constants import ARTICLE_TYPES
+from core.models import Tag
+from wagtail.core.models import Page
 
-from export_readiness import snippets
-from export_readiness.models import BasePage, MarkdownField
+from domestic.models import MarkdownField
 from . import panels
 
 
-class BaseInternationalPage(BasePage):
-    # service_name_value = 'GREAT_INTERNATIONAL'
-
-    class Meta:
-        abstract = True
-
-    def save(self, *args, **kwargs):
-        # self.uses_tree_based_routing = True
-        return super().save(*args, **kwargs)
-
-
-class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, BaseInternationalPage):
+class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, Page):
     class Meta:
         abstract = True
 
     parent_page_types = [
         'core.LandingPage',
         'domestic.DomesticHomePage',
-        # 'great_international.InternationalTopicLandingPage'
+        # 'international.InternationalTopicLandingPage'
     ]
     subpage_types = []
 
-    tags = ParentalManyToManyField(snippets.Tag, blank=True)
+    tags = ParentalManyToManyField(Tag, blank=True)
 
     heading = models.CharField(max_length=255, verbose_name='Sector name')
     sub_heading = models.TextField(blank=True)
-    hero_image = models.ForeignKey('wagtailimages.Image', null=True, on_delete=models.SET_NULL, related_name='+')
+    hero_image = models.ForeignKey('core.AltTextImage', null=True, on_delete=models.SET_NULL, related_name='+')
     heading_teaser = models.TextField(blank=True, verbose_name='Introduction')
     featured_description = models.TextField(
         blank=True,
@@ -45,7 +35,7 @@ class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, Base
 
     section_one_body = MarkdownField(null=True, verbose_name='3 unique selling points markdown', blank=True)
     section_one_image = models.ForeignKey(
-        'wagtailimages.Image',
+        'core.AltTextImage',
         null=True,
         on_delete=models.SET_NULL,
         related_name='+',
@@ -85,7 +75,7 @@ class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, Base
     section_two_teaser = models.TextField(verbose_name='Spotlight summary', blank=True)
 
     section_two_subsection_one_icon = models.ForeignKey(
-        'wagtailimages.Image',
+        'core.AltTextImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -98,7 +88,7 @@ class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, Base
     section_two_subsection_one_body = models.TextField(verbose_name='Spotlight 1 body', blank=True)
 
     section_two_subsection_two_icon = models.ForeignKey(
-        'wagtailimages.Image',
+        'core.AltTextImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -111,7 +101,7 @@ class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, Base
     section_two_subsection_two_body = models.TextField(verbose_name='Spotlight 2 body', blank=True)
 
     section_two_subsection_three_icon = models.ForeignKey(
-        'wagtailimages.Image',
+        'core.AltTextImage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -135,7 +125,7 @@ class BaseInternationalSectorPage(panels.BaseInternationalSectorPagePanels, Base
         verbose_name='Case study link URL',
     )
     case_study_image = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
 
     section_three_heading = models.CharField(max_length=255, blank=True, verbose_name='Fact sheets heading')
@@ -177,7 +167,7 @@ class InternationalSectorPage(BaseInternationalSectorPage):
     parent_page_types = [
         'core.LandingPage',
         'domestic.DomesticHomePage',
-        # 'great_international.InternationalTopicLandingPage'
+        # 'international.InternationalTopicLandingPage'
     ]
 
     @classmethod
@@ -187,10 +177,10 @@ class InternationalSectorPage(BaseInternationalSectorPage):
 
 class InternationalSubSectorPage(BaseInternationalSectorPage):
 
-    parent_page_types = ['great_international.InternationalSectorPage']
+    parent_page_types = ['international.InternationalSectorPage']
 
 
-class InternationalArticlePage(panels.InternationalArticlePagePanels, BaseInternationalPage):
+class InternationalArticlePage(panels.InternationalArticlePagePanels, Page):
     parent_page_types = [
         'core.LandingPage',
         'domestic.DomesticHomePage',
@@ -207,7 +197,7 @@ class InternationalArticlePage(panels.InternationalArticlePagePanels, BaseIntern
         blank=True, help_text="This is a subheading that displays when the article " "is featured on another page"
     )
     article_image = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
     article_video = models.ForeignKey(
         'wagtailmedia.Media', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
@@ -221,37 +211,37 @@ class InternationalArticlePage(panels.InternationalArticlePagePanels, BaseIntern
     cta_link = models.CharField(max_length=255, blank=True, verbose_name='CTA link')
 
     related_page_one = models.ForeignKey(
-        'great_international.InternationalArticlePage',
+        'international.InternationalArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
     related_page_two = models.ForeignKey(
-        'great_international.InternationalArticlePage',
+        'international.InternationalArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
     related_page_three = models.ForeignKey(
-        'great_international.InternationalArticlePage',
+        'international.InternationalArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
-    tags = ParentalManyToManyField(snippets.Tag, blank=True)
+    tags = ParentalManyToManyField(Tag, blank=True)
 
 
-class InternationalCampaignPage(panels.InternationalCampaignPagePanels, BaseInternationalPage):
+class InternationalCampaignPage(panels.InternationalCampaignPagePanels, Page):
     parent_page_types = [
         'core.LandingPage',
         'domestic.DomesticHomePage',
-        # 'great_international.InternationalArticleListingPage',
-        # 'great_international.InternationalTopicLandingPage',
+        # 'international.InternationalArticleListingPage',
+        # 'international.InternationalTopicLandingPage',
     ]
-    subpage_types = ['great_international.InternationalArticlePage']
+    subpage_types = ['international.InternationalArticlePage']
     view_path = 'campaigns/'
 
     campaign_subheading = models.CharField(
@@ -262,23 +252,23 @@ class InternationalCampaignPage(panels.InternationalCampaignPagePanels, BaseInte
     campaign_teaser = models.CharField(max_length=255, null=True, blank=True)
     campaign_heading = models.CharField(max_length=255)
     campaign_hero_image = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
 
     section_one_heading = models.CharField(max_length=255)
     section_one_intro = MarkdownField()
     section_one_image = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
 
     selling_point_one_icon = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
     selling_point_one_heading = models.CharField(max_length=255)
     selling_point_one_content = MarkdownField()
 
     selling_point_two_icon = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
     selling_point_two_heading = models.CharField(
         max_length=255,
@@ -288,7 +278,7 @@ class InternationalCampaignPage(panels.InternationalCampaignPagePanels, BaseInte
     selling_point_two_content = MarkdownField(null=True, blank=True)
 
     selling_point_three_icon = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
     selling_point_three_heading = models.CharField(max_length=255, null=True, blank=True)
     selling_point_three_content = MarkdownField(null=True, blank=True)
@@ -300,7 +290,7 @@ class InternationalCampaignPage(panels.InternationalCampaignPagePanels, BaseInte
     section_two_intro = MarkdownField()
 
     section_two_image = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        'core.AltTextImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
     )
 
     section_two_contact_button_url = models.CharField(max_length=255, null=True, blank=True)
@@ -310,21 +300,21 @@ class InternationalCampaignPage(panels.InternationalCampaignPagePanels, BaseInte
     related_content_intro = MarkdownField()
 
     related_page_one = models.ForeignKey(
-        'great_international.InternationalArticlePage',
+        'international.InternationalArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
     related_page_two = models.ForeignKey(
-        'great_international.InternationalArticlePage',
+        'international.InternationalArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
     related_page_three = models.ForeignKey(
-        'great_international.InternationalArticlePage',
+        'international.InternationalArticlePage',
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -335,4 +325,4 @@ class InternationalCampaignPage(panels.InternationalCampaignPagePanels, BaseInte
     cta_box_button_url = models.CharField(max_length=255)
     cta_box_button_text = models.CharField(max_length=255)
 
-    tags = ParentalManyToManyField(snippets.Tag, blank=True)
+    tags = ParentalManyToManyField(Tag, blank=True)

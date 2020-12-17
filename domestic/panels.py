@@ -707,25 +707,25 @@ class CountryGuidePagePanels:
                         PageChooserPanel(
                             'related_page_one',
                             [
-                                'export_readiness.ArticlePage',
-                                'export_readiness.CampaignPage',
-                                'export_readiness.ArticleListingPage',
+                                'domestic.ArticlePage',
+                                'domestic.CampaignPage',
+                                'domestic.ArticleListingPage',
                             ],
                         ),
                         PageChooserPanel(
                             'related_page_two',
                             [
-                                'export_readiness.ArticlePage',
-                                'export_readiness.CampaignPage',
-                                'export_readiness.ArticleListingPage',
+                                'domestic.ArticlePage',
+                                'domestic.CampaignPage',
+                                'domestic.ArticleListingPage',
                             ],
                         ),
                         PageChooserPanel(
                             'related_page_three',
                             [
-                                'export_readiness.ArticlePage',
-                                'export_readiness.CampaignPage',
-                                'export_readiness.ArticleListingPage',
+                                'domestic.ArticlePage',
+                                'domestic.CampaignPage',
+                                'domestic.ArticleListingPage',
                             ],
                         ),
                     ]
@@ -736,7 +736,7 @@ class CountryGuidePagePanels:
     ]
 
     settings_panels = [
-        FieldPanel('title_en_gb'),
+        FieldPanel('title'),
         FieldPanel('slug'),
         FieldPanel('tags', widget=CheckboxSelectMultiple),
         FieldPanel('country'),
@@ -813,9 +813,9 @@ class CampaignPagePanels:
                 FieldPanel('related_content_intro'),
                 FieldRowPanel(
                     [
-                        PageChooserPanel('related_page_one', 'export_readiness.ArticlePage'),
-                        PageChooserPanel('related_page_two', 'export_readiness.ArticlePage'),
-                        PageChooserPanel('related_page_three', 'export_readiness.ArticlePage'),
+                        PageChooserPanel('related_page_one', 'domestic.ArticlePage'),
+                        PageChooserPanel('related_page_two', 'domestic.ArticlePage'),
+                        PageChooserPanel('related_page_three', 'domestic.ArticlePage'),
                     ]
                 ),
             ],
@@ -840,7 +840,7 @@ class CampaignPagePanels:
     ]
 
     settings_panels = [
-        FieldPanel('title_en_gb'),
+        FieldPanel('title'),
         FieldPanel('slug'),
     ]
 
@@ -874,9 +874,9 @@ class ArticlePagePanels:
             children=[
                 FieldRowPanel(
                     [
-                        PageChooserPanel('related_page_one', 'export_readiness.ArticlePage'),
-                        PageChooserPanel('related_page_two', 'export_readiness.ArticlePage'),
-                        PageChooserPanel('related_page_three', 'export_readiness.ArticlePage'),
+                        PageChooserPanel('related_page_one', 'domestic.ArticlePage'),
+                        PageChooserPanel('related_page_two', 'domestic.ArticlePage'),
+                        PageChooserPanel('related_page_three', 'domestic.ArticlePage'),
                     ]
                 ),
             ],
@@ -885,7 +885,7 @@ class ArticlePagePanels:
     ]
 
     settings_panels = [
-        FieldPanel('title_en_gb'),
+        FieldPanel('title'),
         FieldPanel('type_of_article', widget=Select),
         FieldPanel('slug'),
         FieldPanel('tags', widget=CheckboxSelectMultiple),
@@ -918,9 +918,9 @@ class MarketingArticlePagePanels:
             children=[
                 FieldRowPanel(
                     [
-                        PageChooserPanel('related_page_one', 'export_readiness.ArticlePage'),
-                        PageChooserPanel('related_page_two', 'export_readiness.ArticlePage'),
-                        PageChooserPanel('related_page_three', 'export_readiness.ArticlePage'),
+                        PageChooserPanel('related_page_one', 'domestic.ArticlePage'),
+                        PageChooserPanel('related_page_two', 'domestic.ArticlePage'),
+                        PageChooserPanel('related_page_three', 'domestic.ArticlePage'),
                     ]
                 ),
             ],
@@ -929,7 +929,7 @@ class MarketingArticlePagePanels:
     ]
 
     settings_panels = [
-        FieldPanel('title_en_gb'),
+        FieldPanel('title'),
         FieldPanel('slug'),
         FieldPanel('tags', widget=CheckboxSelectMultiple),
     ]
@@ -945,6 +945,6 @@ class ArticleListingPagePanels:
     ]
 
     settings_panels = [
-        FieldPanel('title_en_gb'),
+        FieldPanel('title'),
         FieldPanel('slug'),
     ]

@@ -27,9 +27,6 @@ APPEND_SLASH = True
 # Application definition
 
 INSTALLED_APPS = [
-    # 'wagtail_modeltranslation',
-    # 'wagtail_modeltranslation.makemigrations',
-    # 'wagtail_modeltranslation.migrate',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
@@ -68,12 +65,11 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'cms_extras.apps.CmsExtrasConfig',
     'domestic',
+    'international',
     'exportplan.apps.ExportPlanConfig',
     'users.apps.UsersConfig',
     'learn.apps.LearnConfig',
     'captcha',
-    'export_readiness',  # domestic
-    'great_international',  # international, natch
 ]
 
 MIDDLEWARE = [
@@ -86,7 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'wagtail.core.middleware.SiteMiddleware',
+    # 'wagtail.core.middleware.SiteMiddleware',  # DEPRECATED IN 2.9, REMOVED in 2.11
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
     'core.middleware.UserSpecificRedirectMiddleware',
     'core.middleware.UserLocationStoreMiddleware',
@@ -171,10 +167,6 @@ USE_L10N = True
 USE_TZ = True
 
 # Translation
-# MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField',)
-# MODELTRANSLATION_FALLBACK_LANGUAGES = ()
-# WAGTAILMODELTRANSLATION_TRANSLATE_SLUGS = False
-
 
 # https://github.com/django/django/blob/master/django/conf/locale/__init__.py
 LANGUAGES_DETAILS = (
@@ -411,7 +403,7 @@ GA360_BUSINESS_UNIT = 'GreatMagna'
 
 REST_FRAMEWORK = {'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',)}
 
-# WAGTAILIMAGES_IMAGE_MODEL = 'core.AltTextImage'
+WAGTAILIMAGES_IMAGE_MODEL = 'core.AltTextImage'
 WAGTAILMEDIA_MEDIA_MODEL = 'core.GreatMedia'
 
 # Google captcha

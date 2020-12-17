@@ -89,7 +89,7 @@ class DocumentHash(AbstractObjectHash):
 
 
 class ImageHash(AbstractObjectHash):
-    image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.CASCADE, related_name='+')
+    image = models.ForeignKey('core.AltTextImage', null=True, blank=True, on_delete=models.CASCADE, related_name='+')
 
 
 class AltTextImage(AbstractImage):
@@ -157,17 +157,52 @@ class Product(models.Model):
 
 @register_snippet
 class Country(models.Model):
-    name = models.CharField(max_length=255)
-
-    panels = [
-        FieldPanel('name'),
-    ]
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.CharField(max_length=255, unique=True, blank=True)
+    region = models.ForeignKey('Region', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.name
 
+    panels = [
+        FieldPanel("name"),
+        FieldPanel("slug"),
+        FieldPanel("region"),
+    ]
+
     class Meta:
         verbose_name_plural = 'Countries'
+
+
+@register_snippet
+class Tag(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    panels = [FieldPanel("name")]
+
+
+@register_snippet
+class IndustryTag(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    icon = models.ForeignKey("core.AltTextImage", null=True, blank=True, on_delete=models.SET_NULL, related_name="+")
+
+    def __str__(self):
+        return self.name
+
+    panels = [FieldPanel("name"), ImageChooserPanel("icon")]
+
+
+@register_snippet
+class Region(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    panels = [FieldPanel("name")]
 
 
 class TimeStampedModel(models.Model):
