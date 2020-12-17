@@ -27,9 +27,9 @@ APPEND_SLASH = True
 # Application definition
 
 INSTALLED_APPS = [
-    'wagtail_modeltranslation',
-    'wagtail_modeltranslation.makemigrations',
-    'wagtail_modeltranslation.migrate',
+    # 'wagtail_modeltranslation',
+    # 'wagtail_modeltranslation.makemigrations',
+    # 'wagtail_modeltranslation.migrate',
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.modeladmin',
@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'wagtail_personalisation',
     'wagtailfontawesome',
     'wagtail_transfer',
-    'modelcluster',
+    'wagtail_localize',
+    'wagtail_localize.locales',  # Note: This replaces "wagtail.locales"    'modelcluster',
     'taggit',
     'storages',
     'django_extensions',
@@ -170,9 +171,9 @@ USE_L10N = True
 USE_TZ = True
 
 # Translation
-MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField',)
-MODELTRANSLATION_FALLBACK_LANGUAGES = ()
-WAGTAILMODELTRANSLATION_TRANSLATE_SLUGS = False
+# MODELTRANSLATION_CUSTOM_FIELDS = ('RichTextField',)
+# MODELTRANSLATION_FALLBACK_LANGUAGES = ()
+# WAGTAILMODELTRANSLATION_TRANSLATE_SLUGS = False
 
 
 # https://github.com/django/django/blob/master/django/conf/locale/__init__.py
@@ -187,9 +188,10 @@ LANGUAGES_DETAILS = (
     ('ar', 'Arabic', 'العربيّة'),
 )
 LANGUAGES = [(code, label) for code, label, _ in LANGUAGES_DETAILS]
+
 LANGUAGES_LOCALIZED = [(code, label) for code, _, label in LANGUAGES_DETAILS]
 
-LANGUAGE_COOKIE_NAME = 'cms_language'  # avoid clashing with the UI language cookie
+# LANGUAGE_COOKIE_NAME = 'cms_language'  # avoid clashing with the UI language cookie
 
 
 # Static files (CSS, JavaScript, Images)

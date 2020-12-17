@@ -14,13 +14,14 @@ django-decorator-include==3.0
 # Wagtail
 # ------------
 wagtail-factories==2.0.*
-wagtail==2.10.*
+wagtail==2.11.*
 wagtail-personalisation==0.14.*
 wagtail-cache==1.0.*
 wagtailmedia==0.5.0
 wagtailfontawesome==1.2.1
+wagtail-localize==0.9.4
 wagtail-transfer==0.6.0
-wagtail-modeltranslation==0.10.15  # 0.10.13 on directory-cms
+# wagtail-modeltranslation==0.10.15  # 0.10.13 on directory-cms
 
 # Prod tools
 # ------------
